@@ -8,6 +8,11 @@ def call (Map configMap) {
             disableConcurrentBuilds()
             ansiColor('xterm')
         }
+
+        parameters{
+        booleanParam(name: 'deploy', defaultValue: false, description: 'Select to deploy or not')
+        }
+        
         environment {
             DEBUG = 'true'
             appversion = ''
