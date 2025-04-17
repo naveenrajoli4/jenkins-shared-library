@@ -39,7 +39,7 @@ def call (Map configMap) {
                     sh """
                         
                         npm install
-                        
+
                     """
                 }
             }
@@ -96,7 +96,7 @@ def call (Map configMap) {
                 }
                 steps {
                     
-                    build job: '../${component}-CD', parameters: [
+                    build job: "../${component}-CD", parameters: [
                         string(name: 'version', value: "$appversion"),
                         string(name: 'ENVIRONMENT', value: "prod"),
                     ], wait: true
