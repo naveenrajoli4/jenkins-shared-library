@@ -12,11 +12,11 @@ def call(Map configMap){
             booleanParam(name: 'deploy', defaultValue: false, description: 'Select to deploy or not')
         }
         environment {
-            appVersion = '' // this will become global, we can use across pipeline
+            appversion = '' // this will become global, we can use across pipeline
             region = 'us-east-1'
-            account_id = '315069654700'
+            account_id = '135808959960'
             project = configMap.get("project")
-            environment = 'dev'
+            environment = 'prod'
             component = configMap.get("component")
         }
 
@@ -25,8 +25,8 @@ def call(Map configMap){
                 steps {
                     script{
                         def packageJson = readJSON file: 'package.json'
-                        appVersion = packageJson.version
-                        echo "App version: ${appVersion}"
+                        appversion = packageJson.version
+                        echo "App version: ${appversion}"
                     }
                 }
             }
@@ -60,13 +60,14 @@ def call(Map configMap){
                 steps {
                     withAWS(region: 'us-east-1', credentials: "aws-creds-${environment}") {
                         sh """
-                        aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${account_id}.dkr.ecr.us-east-1.amazonaws.com
+                            aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${acc_ID}.dkr.ecr.${region}.amazonaws.com
 
-                        docker build -t ${account_id}.dkr.ecr.us-east-1.amazonaws.com/${project}/${environment}/${component}:${appVersion} .
+                            docker build -t ${acc_ID}.dkr.ecr.${region}.amazonaws.com/kdp-${project}-${environment}/${component}:${appversion} .
 
-                        docker images
+                            docker images
 
-                        docker push ${account_id}.dkr.ecr.us-east-1.amazonaws.com/${project}/${environment}/${component}:${appVersion}
+                            docker push ${acc_ID}.dkr.ecr.${region}.amazonaws.com/kdp-${project}-${environment}/${component}:${appversion}                 
+
                         """
                     }
                 }
@@ -77,9 +78,9 @@ def call(Map configMap){
                 }
 
                 steps{
-                    build job: "../${component}-cd", parameters: [
-                        string(name: 'version', value: "$appVersion"),
-                        string(name: 'ENVIRONMENT', value: "dev"),
+                    build job: "../${component}-CD", parameters: [
+                        string(name: 'version', value: "$appversion"),
+                        string(name: 'ENVIRONMENT', value: "prod"),
                     ], wait: true
                 }
             }
