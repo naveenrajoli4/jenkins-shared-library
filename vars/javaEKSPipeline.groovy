@@ -82,7 +82,7 @@ def call(Map configMap){
 
                 steps{
                     build job: "../${component}-CD", parameters: [
-                        string(name: 'version', value: "$appVersion"),
+                        string(name: 'version', value: "$appversion"),
                         string(name: 'ENVIRONMENT', value: "dev"),
                     ], wait: true
                 }
