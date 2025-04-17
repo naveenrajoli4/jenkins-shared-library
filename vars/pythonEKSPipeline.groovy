@@ -11,13 +11,16 @@ def call(Map configMap){
         parameters{
             booleanParam(name: 'deploy', defaultValue: false, description: 'Select to deploy or not')
         }
+        
         environment {
-            appversion = '' // this will become global, we can use across pipeline
+            DEBUG = 'true'
+            appversion = ''
             region = 'us-east-1'
-            account_id = '135808959960'
+            acc_ID = '135808959960'
             project = configMap.get("project")
             environment = 'prod'
             component = configMap.get("component")
+
         }
 
         stages {
