@@ -63,14 +63,14 @@ def call (Map configMap) {
             //     }
             // }
 
-            stage("Docker Build Image") {
-                steps {
-                    sh """
-                        docker build -t naveenrajoli/backend:${appversion} .
-                        docker images
-                    """
-                }
-            }
+            // stage("Docker Build Image") {
+            //     steps {
+            //         sh """
+            //             docker build -t naveenrajoli/backend:${appversion} .
+            //             docker images
+            //         """
+            //     }
+            // }
 
             stage('Push docker image to ECR') {
                 steps {
@@ -95,7 +95,7 @@ def call (Map configMap) {
                 }
                 steps {
                     
-                    build job: '../CD-frontend-expense', parameters: [
+                    build job: '../${component}-cd', parameters: [
                         string(name: 'version', value: "$appversion"),
                         string(name: 'ENVIRONMENT', value: "prod"),
                     ], wait: true
