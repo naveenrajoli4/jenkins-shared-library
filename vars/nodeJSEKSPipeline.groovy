@@ -37,8 +37,9 @@ def call (Map configMap) {
             stage('Install Dependencies') {
                 steps {
                     sh """
-                        cd scripts
+                        
                         npm install
+                        
                     """
                 }
             }
